@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block user %}
+    <div class="navbar-text">
+        Eingeloggt als {{ user.username }}
+        <a class="btn btn-sm btn-outline-secondary" href="{{ path('logout') }}">Ausloggen</a>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <p>Hallo {{ user.username }}!</p>
+    <p>Deine abonnierten Shows werden jede Stunde synchronisiert. Letzer Sync: <em>{% if user.lastSync %}{{ user.lastSync|date('d.m.Y H:i:s') }}{% else %}noch nie synchronisiert{% endif %}</em></p>
+    <p>Du hast im Moment diese Shows abonniert:</p>
+    <ul class="list-group">
+        {% for subscription in user.userSubscriptions %}
+            <li class="list-group-item">{{ subscription.title }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
