@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block user %}
+    <div class="navbar-text">
+        <a class="btn btn-sm btn-outline-secondary" href="{{ path('connect_rocketbeans_start') }}">Login</a>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <h1>Rocketpush</h1>
+
+    <p>Rocketpush schickt dir Push-Benachrichtigungen wenn eine deiner abonnierten Shows auf Rocketbeans startet.</p>
+
+    <a class="btn btn-primary" href="{{ path('connect_rocketbeans_start') }}">Mit rocketbeans.tv Account einloggen</a>
+{% endblock %}

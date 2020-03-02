@@ -1,0 +1,10 @@
+knpu_oauth2_client:
+  clients:
+    # will create a service: "knpu.oauth2.client.rocketbeans"
+    rocketbeans:
+      type: generic
+      provider_class: App\OauthProviders\Rocketbeans
+      client_id: '%env(ROCKETBEANS_OAUTH_CLIENT_ID)%'
+      client_secret: '%env(ROCKETBEANS_OAUTH_CLIENT_SECRET)%'
+      redirect_route: connect_rocketbeans_redirect
+      redirect_params: {}
