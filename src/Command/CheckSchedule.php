@@ -74,8 +74,7 @@ class CheckSchedule extends Command {
                 $startTimestamp = strtotime($scheduleItem->timeStart);
                 $endTimestamp = strtotime($scheduleItem->timeEnd);
 
-//                if ($scheduleItem->type == 'live' && $startTimestamp < time() + 10*60 && time() < $endTimestamp) {
-                if ($startTimestamp < time() + 10*60 && time() < $endTimestamp) {
+                if ($scheduleItem->type == 'live' && $startTimestamp < time() + 10*60 && time() < $endTimestamp) {
                     $upcomingShow = $scheduleItem;
                     break;
                 }
