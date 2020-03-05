@@ -78,10 +78,6 @@ class CheckSchedule extends Command {
                     $upcomingShow = $scheduleItem;
                     break;
                 }
-
-                // DEV OVERRIDE
-                $upcomingShow = $scheduleItem;
-                break;
             }
 
             if ($upcomingShow) {
