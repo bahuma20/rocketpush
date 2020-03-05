@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ec5bfbca9bad9b786e97f6810a2e92d",
+    "content-hash": "8d0eadf03df3a8ea533c691380c4d030",
     "packages": [
         {
             "name": "bentools/webpush-bundle",
@@ -2750,6 +2750,28 @@
                 "url"
             ],
             "time": "2019-04-18T11:52:47+00:00"
+        },
+        {
+            "name": "symfony/apache-pack",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/apache-pack.git",
+                "reference": "d7e64ecf8e5974738924b84cedc70cacc8afa47f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/apache-pack/zipball/d7e64ecf8e5974738924b84cedc70cacc8afa47f",
+                "reference": "d7e64ecf8e5974738924b84cedc70cacc8afa47f",
+                "shasum": ""
+            },
+            "type": "symfony-pack",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A pack for Apache support in Symfony",
+            "time": "2020-02-11T16:22:56+00:00"
         },
         {
             "name": "symfony/asset",
@@ -8206,7 +8228,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "bentools/webpush-bundle": 20
+        "bentools/webpush-bundle": 20,
+        "symfony/apache-pack": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
