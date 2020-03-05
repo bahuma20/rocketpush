@@ -9,6 +9,9 @@
 
 {% block body %}
     <p>Hallo {{ user.username }}!</p>
+
+    <button class="enable-push">Enable Push</button>
+
     <p>Deine abonnierten Shows werden jede Stunde synchronisiert. Letzer Sync: <em>{% if user.lastSync %}{{ user.lastSync|date('d.m.Y H:i:s') }}{% else %}noch nie synchronisiert{% endif %}</em></p>
     <p>Du hast im Moment diese Shows abonniert:</p>
     <ul class="list-group">

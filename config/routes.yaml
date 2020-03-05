@@ -1,3 +1,7 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+bentools_webpush:
+  path: /webpush
+  controller: BenTools\WebPushBundle\Action\RegisterSubscriptionAction
+  methods: [POST, DELETE]

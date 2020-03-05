@@ -69,9 +69,15 @@ class User implements UserInterface
      */
     private $masterUser;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\WebPushUserSubscription", mappedBy="user", orphanRemoval=true)
+     */
+    private $webPushUserSubscriptions;
+
     public function __construct()
     {
         $this->userSubscriptions = new ArrayCollection();
+        $this->webPushUserSubscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -255,6 +261,37 @@ class User implements UserInterface
     public function setMasterUser(?bool $masterUser): self
     {
         $this->masterUser = $masterUser;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WebPushUserSubscription[]
+     */
+    public function getWebPushUserSubscriptions(): Collection
+    {
+        return $this->webPushUserSubscriptions;
+    }
+
+    public function addWebPushUserSubscription(WebPushUserSubscription $webPushUserSubscription): self
+    {
+        if (!$this->webPushUserSubscriptions->contains($webPushUserSubscription)) {
+            $this->webPushUserSubscriptions[] = $webPushUserSubscription;
+            $webPushUserSubscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWebPushUserSubscription(WebPushUserSubscription $webPushUserSubscription): self
+    {
+        if ($this->webPushUserSubscriptions->contains($webPushUserSubscription)) {
+            $this->webPushUserSubscriptions->removeElement($webPushUserSubscription);
+            // set the owning side to null (unless already changed)
+            if ($webPushUserSubscription->getUser() === $this) {
+                $webPushUserSubscription->setUser(null);
+            }
+        }
 
         return $this;
     }

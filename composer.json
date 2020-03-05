@@ -1,10 +1,18 @@
 {
     "type": "project",
     "license": "proprietary",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/bahuma20/webpush-bundle.git"
+        }
+    ],
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
+        "bentools/webpush-bundle": "^1.0@dev",
         "knpuniversity/oauth2-client-bundle": "^1.33",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.0.*",
@@ -28,8 +36,7 @@
         "symfony/twig-pack": "*",
         "symfony/validator": "5.0.*",
         "symfony/web-link": "5.0.*",
-        "symfony/yaml": "5.0.*",
-        "ext-json": "*"
+        "symfony/yaml": "5.0.*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
@@ -82,5 +89,6 @@
             "allow-contrib": false,
             "require": "5.0.*"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

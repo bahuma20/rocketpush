@@ -3,8 +3,8 @@ Push Benachrichtigungen für rocketbeans.tv
 
 ## Features
 - [x] Login mit rocketbeans.tv Account
-- [ ] Es werden automatisch die Abonnements der rocketbeans.tv Website übernommen
-- [ ] Push Benachrichtigungen 10 Minuten bevor im Livestream etwas startet
+- [x] Es werden automatisch die Abonnements der rocketbeans.tv Website übernommen
+- [x] Push Benachrichtigungen 10 Minuten bevor im Livestream etwas startet
 - [ ] Pro Show kann eingestellt werden ob man Live-Streams, Premieren oder Wiederholungen sehen möchte
 - [ ] Man kann sich benachrichtigen lassen wenn eine neue Show im Sendeplan aufgetaucht ist
 
@@ -21,5 +21,6 @@ Push Benachrichtigungen für rocketbeans.tv
   and `DATABASE_URL` variables
 - Create a [Rocketbeans App](https://rocketbeans.tv/accountsettings/apps) and copy the
   client id and client secret into the `.env.local` file
+- Run `php bin/console webpush:generate:keys` and store the values in the `.env.local` file
 - Point your webserver to the `public directory` (or run `symfony serve`)
 - Enable HTTPS for the site, because on HTTP push notifications would not work

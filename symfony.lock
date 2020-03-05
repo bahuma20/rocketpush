@@ -1,4 +1,7 @@
 {
+    "bentools/webpush-bundle": {
+        "version": "1.0.x-dev"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -90,6 +93,9 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "fgrosse/phpasn1": {
+        "version": "2.1.x-dev"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.5.2"
     },
@@ -114,6 +120,9 @@
     "league/oauth2-client": {
         "version": "2.4.1"
     },
+    "minishlink/web-push": {
+        "version": "v5.2.4"
+    },
     "monolog/monolog": {
         "version": "2.0.2"
     },
@@ -125,6 +134,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
+    },
+    "paragonie/sodium_compat": {
+        "version": "v1.12.2"
     },
     "php": {
         "version": "7.2"
@@ -170,6 +182,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "spomky-labs/base64url": {
+        "version": "v2.x-dev"
     },
     "symfony/asset": {
         "version": "v5.0.4"
@@ -541,6 +556,33 @@
     },
     "twig/twig": {
         "version": "v3.0.3"
+    },
+    "web-token/jwt-core": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-key-mgmt": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-signature": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-signature-algorithm-ecdsa": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-signature-algorithm-eddsa": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-signature-algorithm-hmac": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-signature-algorithm-none": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-signature-algorithm-rsa": {
+        "version": "v1.3.x-dev"
+    },
+    "web-token/jwt-util-ecc": {
+        "version": "v1.3.x-dev"
     },
     "webmozart/assert": {
         "version": "1.7.0"
