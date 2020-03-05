@@ -74,7 +74,8 @@ class CheckSchedule extends Command {
                 $startTimestamp = strtotime($scheduleItem->timeStart);
                 $endTimestamp = strtotime($scheduleItem->timeEnd);
 
-                if ($scheduleItem->type == 'live' && $startTimestamp < time() + 10*60 && time() < $endTimestamp) {
+//                if ($scheduleItem->type == 'live' && $startTimestamp < time() + 10*60 && time() < $endTimestamp) {
+                if ($startTimestamp < time() + 10*60 && time() < $endTimestamp) {
                     $upcomingShow = $scheduleItem;
                     break;
                 }
@@ -88,7 +89,6 @@ class CheckSchedule extends Command {
 
                 // We haven't notified the users about this
                 if (!$scheduleItem) {
-                    print 'Should send notifications';
                     $scheduleItem = new ScheduleItem();
                     $scheduleItem->setRbtvId($upcomingShow->id);
                     $scheduleItem->setSent(true);
@@ -125,7 +125,7 @@ class CheckSchedule extends Command {
                     ]);
 
                     $this->sender->setDefaultOptions([
-                        'TTL' => 25*60, // If the push server wasn't able to deliver the notificatoin within 25 minutes, it is not necessary anymore.
+                        'TTL' => 25*60, // If the push server wasn't able to deliver the notification within 25 minutes, it is not necessary anymore.
                     ]);
 
                     $responses = $this->sender->push($notification->createMessage(), $subscriptions);
@@ -134,8 +134,6 @@ class CheckSchedule extends Command {
                         if ($response->isExpired()) {
                             $this->userSubscriptionManager->delete($response->getSubscription());
                         }
-
-                        $output->write($response->getStatusCode());
                     }
                 }
             }
