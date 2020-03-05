@@ -122,7 +122,7 @@ class CheckSchedule extends Command {
                         PushNotification::DATA => [
                             'link' => 'https://rocketbeans.tv',
                         ],
-                        PushNotification::BADGE => '/assets/logo-96x96.png', // 96x96px
+                        PushNotification::BADGE => '/assets/badge-96x96.png', // 96x96px
                         PushNotification::ICON => '/assets/logo-192x192.png', // 192x192
                         PushNotification::RENOTIFY => true,
                         'tag' => 'show_started', // Only the latest show will be shown as a notification. Because when a new show starts, the old notification is irrelevant.
