@@ -8,16 +8,235 @@
 {% endblock %}
 
 {% block body %}
-    <p>Hallo {{ user.username }}!</p>
+    <div class="alert alert-warning push-status-unsupported d-none" role="alert">
+        <h4 class="alert-heading">Dein Browser wird nicht unterstützt</h4>
+        <p>Push-Benachrichtigungen werden im Moment nur von Chrome, Firefox und Microsoft Edge unterstützt.</p>
+        <p>Bitte verwende einen modernen Browser, um Rocketpush nutzen zu können.</p>
+    </div>
 
-    <button class="enable-push">Enable Push</button>
+    <div class="card push-status-disabled d-none">
+        <div class="card-body">
+            <h5 class="card-title">Benachrichtigungen sind deaktiviert!</h5>
+            <p class="card-text">Um über deine abonnierten Shows auf diesem Gerät benachrichtigt zu werden, musst du Rocketpush die Berechtigung erteilen.</p>
+            <a href="#" class="push-enable-button btn btn-primary">Benachrichtigungen einschalten</a>
+        </div>
+    </div>
 
-    <p>Deine abonnierten Shows werden jede Stunde synchronisiert. Letzer Sync: <em>{% if user.lastSync %}{{ user.lastSync|date('d.m.Y H:i:s') }}{% else %}noch nie synchronisiert{% endif %}</em></p>
-    <p>Du hast im Moment diese Shows abonniert:</p>
-    <ul class="list-group">
-        {% for subscription in user.userSubscriptions %}
-            <li class="list-group-item">{{ subscription.title }}</li>
-        {% endfor %}
-    </ul>
+    <div class="card push-status-enabled d-none">
+        <div class="card-body">
+            <h5 class="card-title">Benachrichtigungen sind aktiviert</h5>
+            <p class="card-text">Du erhältst auf diesem Gerät Benachrichtigungen, wenn eine deiner abonnierten Shows gerade im Stream läuft.</p>
+            <form class="push-name-form">
+                <div class="form-group">
+                    <label for="devicename">Name dieses Geräts:</label>
+                    <input type="text" class="form-control" id="devicename" aria-describedby="devicenameHelp">
+                    <small id="devicenameHelp" class="form-text text-muted">Gib deinen Geräten aussagekräftige Namen um sie besser auseinanderhalten zu können.</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Speichern</button>
+            </form>
+        </div>
+    </div>
 
+
+    <h3 class="mt-4">Abonnierte Shows</h3>
+    <div class="row mt-2">
+        <div class="col-sm">
+            <p>Deine abonnierten Shows werden alle 30 Minuten mit deinem <a href="https://rocketbeans.tv/accountsettings/subscriptions" target="_blank">rocketbeans.tv</a>-Account synchronisiert.<br>Letzer Sync: <em>{% if user.lastSync %}{{ user.lastSync|date('d.m.Y H:i:s') }} Uhr{% else %}noch nie synchronisiert{% endif %}</em></p>
+            {% if user.userSubscriptions|length > 0 %}
+                <p>Du hast im Moment diese Shows abonniert:</p>
+                <ul class="list-group mb-4">
+                    {% for subscription in user.userSubscriptions %}
+                        <li class="list-group-item">{{ subscription.title }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Du hast noch keine Shows abonniert, erhältst also auch noch keine Benachrichtigungen.</p>
+            {% endif %}
+            <p>Um {% if user.userSubscriptions|length > 0 %}weitere {% endif %}Shows zu abonnieren gehe einfach auf <a href="https://rocketbeans.tv" target="_blank">rocketbeans.tv</a> und logge dich dort ein.</p>
+            <p>Suche dann einfach im Suchfeld oben rechts nach deinen RBTV-Lieblings-Shows und abonniere sie.</p>
+            <p>Deine Abos kannst du auf <a href="https://rocketbeans.tv/accountsettings/subscriptions" target="_blank">rocketbeans.tv/accountsettings/subscriptions</a> verwalten.</p>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const environmentInfoChecker = {
+            options: [],
+            header: [navigator.platform, navigator.userAgent, navigator.appVersion, navigator.vendor, window.opera],
+            dataos: [
+                { name: 'Windows Phone', value: 'Windows Phone', version: 'OS' },
+                { name: 'Windows', value: 'Win', version: 'NT' },
+                { name: 'iPhone', value: 'iPhone', version: 'OS' },
+                { name: 'iPad', value: 'iPad', version: 'OS' },
+                { name: 'Kindle', value: 'Silk', version: 'Silk' },
+                { name: 'Android', value: 'Android', version: 'Android' },
+                { name: 'PlayBook', value: 'PlayBook', version: 'OS' },
+                { name: 'BlackBerry', value: 'BlackBerry', version: '/' },
+                { name: 'Macintosh', value: 'Mac', version: 'OS X' },
+                { name: 'Linux', value: 'Linux', version: 'rv' },
+                { name: 'Palm', value: 'Palm', version: 'PalmOS' }
+            ],
+            databrowser: [
+                { name: 'Chrome', value: 'Chrome', version: 'Chrome' },
+                { name: 'Firefox', value: 'Firefox', version: 'Firefox' },
+                { name: 'Safari', value: 'Safari', version: 'Version' },
+                { name: 'Internet Explorer', value: 'MSIE', version: 'MSIE' },
+                { name: 'Opera', value: 'Opera', version: 'Opera' },
+                { name: 'BlackBerry', value: 'CLDC', version: 'CLDC' },
+                { name: 'Mozilla', value: 'Mozilla', version: 'Mozilla' }
+            ],
+            init: function () {
+                var agent = this.header.join(' '),
+                    os = this.matchItem(agent, this.dataos),
+                    browser = this.matchItem(agent, this.databrowser);
+
+                return { os: os, browser: browser };
+            },
+            matchItem: function (string, data) {
+                var i = 0,
+                    j = 0,
+                    html = '',
+                    regex,
+                    regexv,
+                    match,
+                    matches,
+                    version;
+
+                for (i = 0; i < data.length; i += 1) {
+                    regex = new RegExp(data[i].value, 'i');
+                    match = regex.test(string);
+                    if (match) {
+                        regexv = new RegExp(data[i].version + '[- /:;]([\\d._]+)', 'i');
+                        matches = string.match(regexv);
+                        version = '';
+                        if (matches) { if (matches[1]) { matches = matches[1]; } }
+                        if (matches) {
+                            matches = matches.split(/[._]+/);
+                            for (j = 0; j < matches.length; j += 1) {
+                                if (j === 0) {
+                                    version += matches[j] + '.';
+                                } else {
+                                    version += matches[j];
+                                }
+                            }
+                        } else {
+                            version = '0';
+                        }
+                        return {
+                            name: data[i].name,
+                            version: parseFloat(version)
+                        };
+                    }
+                }
+                return { name: 'unknown', version: 0 };
+            }
+        };
+
+        var environmentInfo = environmentInfoChecker.init()
+
+
+
+
+
+
+        jQuery(document).ready($ => {
+            function changeLabel(endpoint, label) {
+                return new Promise((resolve, reject) => {
+                    $.post('/api/subscription/change-label', JSON.stringify({
+                        endpoint: endpoint,
+                        label: label,
+                    }))
+                        .done(data => {
+                            resolve(data);
+                        })
+                        .fail(() => {
+                            reject();
+                        });
+                });
+            }
+
+            function getSubscriptionLabel(endpoint) {
+                return new Promise((resolve, reject) => {
+                    $.post('/api/subscription/info', JSON.stringify({
+                        endpoint: endpoint
+                    }))
+                        .done(data => {
+                            if (data.found) {
+                                resolve(data.label);
+                            } else {
+                                reject();
+                            }
+                        })
+                        .fail(() => {
+                            reject();
+                        });
+                });
+            }
+
+
+            let WebPushClient;
+            if (WebPushClientFactory.isSupported()) {
+                WebPushClientFactory.create({
+                    serviceWorkerPath: '/assets/webpush-sw.js',
+                    serverKey: '{{ bentools_webpush.server_key }}',
+                    subscribeUrl: '/webpush'
+                }).then(Client => {
+                    WebPushClient = Client;
+
+                    var permissionState = WebPushClient.getPermissionState();
+                    console.log(permissionState);
+
+                    if (permissionState === 'prompt') {
+                        $('.push-status-disabled').removeClass('d-none');
+                    }
+
+                    if (permissionState === 'granted') {
+                        $('.push-status-enabled').removeClass('d-none');
+                        getSubscriptionLabel(WebPushClient.getSubscription().endpoint)
+                            .then(label => {
+                                $('#devicename').val(label);
+                            })
+                    }
+                })
+            } else {
+                $('.push-status-unsupported').removeClass('d-none');
+            }
+
+
+
+            $('.push-enable-button').click(e => {
+                WebPushClient.subscribe()
+                    .then(subscription => {
+                        const deviceName = environmentInfo.browser.name + ' - ' + environmentInfo.os.name;
+                        changeLabel(subscription.endpoint, deviceName)
+                            .then(() => {
+                                $('.push-status-disabled').addClass('d-none');
+                                $('.push-status-enabled').removeClass('d-none');
+                                $('#devicename').val(deviceName);
+                            });
+
+                    });
+            });
+
+            $('.push-name-form').submit(e => {
+                e.preventDefault();
+                const deviceName = $('#devicename').val();
+                if (deviceName && deviceName.length > 0) {
+                    changeLabel(WebPushClient.getSubscription().endpoint, deviceName)
+                        .then(() => {
+                            let $alert = $('<div class="alert alert-success" role="alert">Der Name wurde aktualisiert</div>');
+                            $('main').prepend($alert);
+                            setTimeout(() => {
+                                $alert.remove();
+                            }, 2000);
+                        })
+                }
+            })
+        })
+    </script>
 {% endblock %}

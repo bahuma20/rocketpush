@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WebPushUserSubscriptionRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class WebPushUserSubscription implements UserSubscriptionInterface
 {
@@ -39,6 +40,13 @@ class WebPushUserSubscription implements UserSubscriptionInterface
      * @ORM\Column(type="json")
      */
     private $subscription = [];
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $label;
 
     /**
      * WebPushUserSubscription constructor.
@@ -124,5 +132,17 @@ class WebPushUserSubscription implements UserSubscriptionInterface
     public function getContentEncoding(): string
     {
         return $this->subscription['content-encoding'] ?? 'aesgcm';
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
     }
 }
