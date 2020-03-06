@@ -40,6 +40,8 @@ class CheckSchedule extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $output->writeln('Check the schedule');
+
         /** @var User $masterUser */
         try {
             $masterUser = $this->em->createQueryBuilder()
@@ -81,6 +83,7 @@ class CheckSchedule extends Command {
             }
 
             if ($upcomingShow) {
+                $output->writeln('We found an upcoming show: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
                 $scheduleItem = $this->em->getRepository(ScheduleItem::class)
                     ->findOneBy([
                         'rbtvId' => $upcomingShow->id,
@@ -88,6 +91,7 @@ class CheckSchedule extends Command {
 
                 // We haven't notified the users about this
                 if (!$scheduleItem) {
+                    $output->writeln('We have not notified previously about this show. So we do now: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
                     $scheduleItem = new ScheduleItem();
                     $scheduleItem->setRbtvId($upcomingShow->id);
                     $scheduleItem->setSent(true);
@@ -105,12 +109,16 @@ class CheckSchedule extends Command {
                         ->setParameter('showid', $upcomingShow->showId)
                         ->execute();
 
+                    $output->writeln('The audience for this show is '. count($users) .' users');
+
                     // Send out the notifications.
                     $subscriptions = [];
 
                     foreach ($users as $user) {
                         $subscriptions += $this->userSubscriptionManager->findByUser($user);
                     }
+
+                    $output->writeln('Those users have '. count($subscriptions) .' subscriptions');
 
                     $notification = new PushNotification('Live: ' . $upcomingShow->title, [
                         PushNotification::BODY => $upcomingShow->topic,
@@ -123,20 +131,32 @@ class CheckSchedule extends Command {
                         'tag' => 'show_started', // Only the latest show will be shown as a notification. Because when a new show starts, the old notification is irrelevant.
                     ]);
 
+                    $output->writeln('We are sending this notification:');
+                    $output->write(json_encode($notification), JSON_PRETTY_PRINT);
+
                     $this->sender->setDefaultOptions([
                         'TTL' => 25*60, // If the push server wasn't able to deliver the notification within 25 minutes, it is not necessary anymore.
                     ]);
 
-                    $responses = $this->sender->push($notification->createMessage(), $subscriptions);
+                    try {
+                        $responses = $this->sender->push($notification->createMessage(), $subscriptions);
 
-                    foreach ($responses as $response) {
-                        if ($response->isExpired()) {
-                            $this->userSubscriptionManager->delete($response->getSubscription());
+                        foreach ($responses as $response) {
+                            if ($response->isExpired()) {
+                                $this->userSubscriptionManager->delete($response->getSubscription());
+                                $output->writeln('The subscription ' . $response->getSubscription()->getSubscriptionHash() . ' of user ' . $response->getSubscription()->getUser()->getUsername(). ' is expired and has been deleted.');
+                            }
                         }
+                    } catch (\ErrorException $e) {
+                        $output->writeln('There was an ErrorException while sending the notifications: ' . $e->getMessage());
                     }
+                } else {
+                    $output->writeln('We already notified the show: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
                 }
             }
         }
+
+        $output->writeln('Finished');
 
         return 0;
     }
