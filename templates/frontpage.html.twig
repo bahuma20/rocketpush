@@ -41,7 +41,8 @@
     <h3 class="mt-4">Abonnierte Shows</h3>
     <div class="row mt-2">
         <div class="col-sm">
-            <p>Deine abonnierten Shows werden alle 30 Minuten mit deinem <a href="https://rocketbeans.tv/accountsettings/subscriptions" target="_blank">rocketbeans.tv</a>-Account synchronisiert.<br>Letzer Sync: <em>{% if user.lastSync %}{{ user.lastSync|date('d.m.Y H:i:s') }} Uhr{% else %}noch nie synchronisiert{% endif %}</em></p>
+            <p>Deine abonnierten Shows werden alle 30 Minuten mit deinem <a href="https://rocketbeans.tv/accountsettings/subscriptions" target="_blank">rocketbeans.tv</a>-Account synchronisiert.
+                <br>Letzer Sync: <em>{% if user.lastSync %}{{ user.lastSync|date('d.m.Y H:i:s') }} Uhr{% else %}noch nie synchronisiert{% endif %}</em> (<a href="{{ path('rbtvsubscriptions_sync') }}">Jetzt synchronisieren</a>) </p>
             {% if user.userSubscriptions|length > 0 %}
                 <p>Du hast im Moment diese Shows abonniert:</p>
                 <ul class="list-group mb-4">
