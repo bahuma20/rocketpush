@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserSubscription;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,22 +16,25 @@ class MainController extends AbstractController {
      *
      * @Route("/", name="app_homepage")
      */
-    public function homepage(RouterInterface $router, ClientRegistry $clientRegistry)
+    public function homepage()
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
         if (!$currentUser) {
-            $loginUrl = $router->generate('connect_rocketbeans_start');
-            return $this->render('frontpage_logged_out.html.twig', [
-                'login_url' => $loginUrl,
-            ]);
+            return $this->render('frontpage_logged_out.html.twig');
         }
 
-        $rocketbeansClient = $clientRegistry->getClient('rocketbeans');
+        $subscriptions = $currentUser->getUserSubscriptions();
+        $subscriptions = $subscriptions->toArray();
+
+        usort($subscriptions, function(UserSubscription $a, UserSubscription $b) {
+            return strcmp($a->getTitle(), $b->getTitle());
+        });
 
         return $this->render('frontpage.html.twig', [
             'user' => $currentUser,
+            'showSubscriptions' => $subscriptions,
         ]);
     }
 
