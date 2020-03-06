@@ -3,18 +3,17 @@
 namespace App\Security;
 
 use App\Entity\User;
-use App\OauthProviders\RockebeansResourceOwner;
 use App\Service\SyncService;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
+use OliverSchloebe\OAuth2\Client\Provider\RbtvResourceOwner;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class RocketbeansAuthenticator extends SocialAuthenticator
@@ -44,7 +43,7 @@ class RocketbeansAuthenticator extends SocialAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /** @var RockebeansResourceOwner $rocketbeansUser */
+        /** @var RbtvResourceOwner $rocketbeansUser */
         $rocketbeansUser = $this->getRocketbeansClient()->fetchUserFromToken($credentials);
 
         /** @var User $existingUser */
@@ -53,7 +52,7 @@ class RocketbeansAuthenticator extends SocialAuthenticator
 
         // Update existing users access token
         if ($existingUser) {
-            $existingUser->setUsername($rocketbeansUser->getDisplayName());
+            $existingUser->setUsername($rocketbeansUser->getName());
             $existingUser->setRbtvAccessToken($credentials->getToken());
             $existingUser->setRbtvRefreshToken($credentials->getRefreshToken());
             $existingUser->setRbtvExpires($credentials->getExpires());
@@ -69,7 +68,7 @@ class RocketbeansAuthenticator extends SocialAuthenticator
         /** @var User $user */
         $user = new User();
 
-        $user->setUsername($rocketbeansUser->getDisplayName());
+        $user->setUsername($rocketbeansUser->getName());
         $user->setRocketbeansId($rocketbeansUser->getId());
         $user->setRbtvAccessToken($credentials->getToken());
         $user->setRbtvRefreshToken($credentials->getRefreshToken());

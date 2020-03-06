@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 
-use App\OauthProviders\RockebeansResourceOwner;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RocketbeansLoginController extends AbstractController {
@@ -28,7 +25,7 @@ class RocketbeansLoginController extends AbstractController {
     /**
      * @Route("/connect/rocketbeans/redirect", name="connect_rocketbeans_redirect")
      */
-    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry) {
+    public function connectCheckAction() {
 
     }
 }

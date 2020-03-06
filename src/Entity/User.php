@@ -2,14 +2,9 @@
 
 namespace App\Entity;
 
-use App\OauthProviders\Rocketbeans;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Token\AccessToken;
-use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

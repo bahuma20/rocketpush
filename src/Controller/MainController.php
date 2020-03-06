@@ -4,11 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\UserSubscription;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\RouterInterface;
 
 class MainController extends AbstractController {
     /**

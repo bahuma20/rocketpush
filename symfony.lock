@@ -135,6 +135,9 @@
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
+    "oliverschloebe/oauth2-rbtv": {
+        "version": "dev-master"
+    },
     "paragonie/sodium_compat": {
         "version": "v1.12.2"
     },

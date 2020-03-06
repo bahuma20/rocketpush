@@ -14,6 +14,7 @@
         "ext-json": "*",
         "bentools/webpush-bundle": "^1.0@dev",
         "knpuniversity/oauth2-client-bundle": "^1.33",
+        "oliverschloebe/oauth2-rbtv": "dev-master",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "dev-master",
         "symfony/asset": "5.0.*",
