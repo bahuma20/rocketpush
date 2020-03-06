@@ -49,6 +49,11 @@ class WebPushUserSubscription implements UserSubscriptionInterface
     private $label;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
      * WebPushUserSubscription constructor.
      * @param UserInterface $user
      * @param string $subscriptionHash
@@ -59,6 +64,14 @@ class WebPushUserSubscription implements UserSubscriptionInterface
         $this->user = $user;
         $this->subscriptionHash = $subscriptionHash;
         $this->subscription = $subscription;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setCreatedTimestampOnCreate()
+    {
+        $this->setCreated(new \DateTime('now'));
     }
 
     public function getId(): ?int
@@ -142,6 +155,18 @@ class WebPushUserSubscription implements UserSubscriptionInterface
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
 
         return $this;
     }
