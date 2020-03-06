@@ -4,7 +4,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}Rocketpush - Push-Benachrichtigungen für Rocketbeans{% endblock %}</title>
+        <meta name="description" content="Dieses Tool schickt euch Push-Benachrichtigungen wenn eine Show von Rocketbeans startet.">
+        <meta property="og:title" content="Rocketpush - Push Benachrichtigungen für Rocketbeans">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://rocketpush.de/assets/og-image.png">
+        <meta property="og:url" content="https://rocketpush.de">
+        <meta property="og:description" content="Dieses Tool schickt euch Push-Benachrichtigungen wenn eine Show von Rocketbeans startet.">
 
+        <link rel="icon" href="{{ asset('assets/favicon.ico') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
     </head>
@@ -19,21 +26,19 @@
         </header>
 
 
-        <main class="container mt-4">
+        <main class="container mt-4" style="min-height: 50vh">
             {% block body %}{% endblock %}
         </main>
 
         <footer class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav justify-content-center mr-auto ml-auto">
-                    <li class="nav-item">
-                        <a href="{{ path('app_impressum') }}" class="nav-link">Impressum</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ path('app_datenschutz') }}" class="nav-link">Datenschutz</a>
-                    </li>
-                </ul>
-            </div>
+            <ul class="navbar-nav justify-content-center mr-auto ml-auto">
+                <li class="nav-item">
+                    <a href="{{ path('app_impressum') }}" class="nav-link">Impressum</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_datenschutz') }}" class="nav-link">Datenschutz</a>
+                </li>
+            </ul>
         </footer>
 
         <script src="{{ asset('assets/js/webpush-client.min.js') }}"></script>

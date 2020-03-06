@@ -7,9 +7,20 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Rocketpush</h1>
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-8 mb-5">
+            <h1>Rocketpush</h1>
 
-    <p>Rocketpush schickt dir Push-Benachrichtigungen wenn eine deiner abonnierten Shows auf Rocketbeans startet.</p>
+            <p>Über diese Website kannst du dir <strong>Push-Benachrichtigungen</strong> in deinen Browser schicken lassen wenn im Live-Programm von <a href="https://rocketbeans.tv" target="_blank">Rocketbeans</a> eine bestimmte Show beginnt, <strong>um nichts mehr zu verpassen</strong>.</p>
+            <p>Die Website muss dazu nicht einmal geöffnet sein.</p>
+            <p>Deine abonnierten Shows werden automatisch von der Rocketbeans Website synchronisiert. Einmal aktiviert musst du dich also um nichts mehr kümmern.</p>
+            <p>Also: <strong>Einloggen und loslegen!</strong></p>
 
-    <a class="btn btn-primary" href="{{ path('connect_rocketbeans_start') }}">Mit rocketbeans.tv Account einloggen</a>
+            <a class="btn btn-primary" href="{{ path('connect_rocketbeans_start') }}">Mit rocketbeans.tv Account einloggen</a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <img src="{{ asset('assets/screenshot.png') }}" alt="Screenshot einer Benachrichtigung" width="1080" height="2160" style="width: 100%; height: auto;">
+        </div>
+    </div>
+    
 {% endblock %}
