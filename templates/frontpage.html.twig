@@ -182,7 +182,7 @@
             let WebPushClient;
             if (WebPushClientFactory.isSupported()) {
                 WebPushClientFactory.create({
-                    serviceWorkerPath: '/assets/webpush-sw.js',
+                    serviceWorkerPath: '/assets/js/webpush-sw.js',
                     serverKey: '{{ bentools_webpush.server_key }}',
                     subscribeUrl: '/webpush'
                 }).then(Client => {

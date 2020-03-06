@@ -41,4 +41,20 @@ class MainController extends AbstractController {
     {
 
     }
+
+    /**
+     * @Route("/impressum", name="app_impressum")
+     */
+    public function impressum()
+    {
+        return $this->render('impressum.html.twig');
+    }
+
+    /**
+     * @Route("/datenschutz", name="app_datenschutz")
+     */
+    public function datenschutz()
+    {
+        return $this->render('datenschutz.html.twig');
+    }
 }
