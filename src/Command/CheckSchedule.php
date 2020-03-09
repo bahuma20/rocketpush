@@ -11,6 +11,7 @@ use BenTools\WebPushBundle\Sender\PushMessageSender;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,15 +21,17 @@ class CheckSchedule extends Command {
     private $em;
     private $userSubscriptionManager;
     private $sender;
+    private $logger;
 
     protected static $defaultName = 'app:check-schedule';
 
-    public function __construct(RbtvApiService $api, EntityManagerInterface $em, UserSubscriptionManagerInterface $userSubscriptionManager, PushMessageSender $sender)
+    public function __construct(RbtvApiService $api, EntityManagerInterface $em, UserSubscriptionManagerInterface $userSubscriptionManager, PushMessageSender $sender, LoggerInterface $logger)
     {
         $this->api = $api;
         $this->em = $em;
         $this->userSubscriptionManager = $userSubscriptionManager;
         $this->sender = $sender;
+        $this->logger = $logger;
         parent::__construct();
     }
 
@@ -38,7 +41,7 @@ class CheckSchedule extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln('Check the schedule');
+        $this->logger->notice('Check the schedule');
 
         /** @var User $masterUser */
         try {
@@ -50,9 +53,11 @@ class CheckSchedule extends Command {
                 ->getSingleResult();
         } catch (NoResultException $e) {
             $output->write('ERROR: Master user could not be found. Please set "masterUser" in the database to true at the main user.');
+            $this->logger->error('ERROR: Master user could not be found. Please set "masterUser" in the database to true at the main user.');
             return 1;
         } catch (NonUniqueResultException $e) {
             $output->write('ERROR: Multiple Master users found. Make sure that "masterUser" is only assigned to the main user.');
+            $this->logger->error('ERROR: Multiple Master users found. Make sure that "masterUser" is only assigned to the main user.');
             return 2;
         }
 
@@ -81,7 +86,7 @@ class CheckSchedule extends Command {
             }
 
             if ($upcomingShow) {
-                $output->writeln('We found an upcoming show: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
+                $this->logger->debug('We found an upcoming show: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
                 $scheduleItem = $this->em->getRepository(ScheduleItem::class)
                     ->findOneBy([
                         'rbtvId' => $upcomingShow->id,
@@ -89,7 +94,8 @@ class CheckSchedule extends Command {
 
                 // We haven't notified the users about this
                 if (!$scheduleItem) {
-                    $output->writeln('We have not notified previously about this show. So we do now: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
+                    $this->logger->debug('We have not notified previously about this show. So we do now: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
+                    $this->logger->info('Notify about show '. $upcomingShow->id . ' - ' . $upcomingShow->title);
                     $scheduleItem = new ScheduleItem();
                     $scheduleItem->setRbtvId($upcomingShow->id);
                     $scheduleItem->setSent(true);
@@ -107,7 +113,7 @@ class CheckSchedule extends Command {
                         ->setParameter('showid', $upcomingShow->showId)
                         ->execute();
 
-                    $output->writeln('The audience for this show is '. count($users) .' users');
+                    $this->logger->info('The audience for this show is '. count($users) .' users');
 
                     // Send out the notifications.
                     $subscriptions = [];
@@ -116,7 +122,7 @@ class CheckSchedule extends Command {
                         $subscriptions += $this->userSubscriptionManager->findByUser($user);
                     }
 
-                    $output->writeln('Those users have '. count($subscriptions) .' subscriptions');
+                    $this->logger->info('Those users have '. count($subscriptions) .' subscriptions');
 
                     $notification = new PushNotification('Live: ' . $upcomingShow->title, [
                         PushNotification::BODY => $upcomingShow->topic,
@@ -129,8 +135,8 @@ class CheckSchedule extends Command {
                         'tag' => 'show_started', // Only the latest show will be shown as a notification. Because when a new show starts, the old notification is irrelevant.
                     ]);
 
-                    $output->writeln('We are sending this notification:');
-                    $output->write(json_encode($notification), JSON_PRETTY_PRINT);
+                    $this->logger->debug('We are sending this notification:');
+                    $this->logger->debug(json_encode($notification, JSON_PRETTY_PRINT));
 
                     $this->sender->setDefaultOptions([
                         'TTL' => 25*60, // If the push server wasn't able to deliver the notification within 25 minutes, it is not necessary anymore.
@@ -142,19 +148,19 @@ class CheckSchedule extends Command {
                         foreach ($responses as $response) {
                             if ($response->isExpired()) {
                                 $this->userSubscriptionManager->delete($response->getSubscription());
-                                $output->writeln('The subscription ' . $response->getSubscription()->getSubscriptionHash() . ' of user ' . $response->getSubscription()->getUser()->getUsername(). ' is expired and has been deleted.');
+                                $this->logger->debug('The subscription ' . $response->getSubscription()->getSubscriptionHash() . ' of user ' . $response->getSubscription()->getUser()->getUsername(). ' is expired and has been deleted.');
                             }
                         }
                     } catch (\ErrorException $e) {
-                        $output->writeln('There was an ErrorException while sending the notifications: ' . $e->getMessage());
+                        $this->logger->error('There was an ErrorException while sending the notifications: ' . $e->getMessage());
                     }
                 } else {
-                    $output->writeln('We already notified the show: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
+                    $this->logger->debug('We already notified the show: ' . $upcomingShow->id . ' - ' . $upcomingShow->title);
                 }
             }
         }
 
-        $output->writeln('Finished');
+        $this->logger->notice('Finished');
 
         return 0;
     }
