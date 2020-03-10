@@ -147,7 +147,7 @@ class CheckSchedule extends Command {
 
                         foreach ($responses as $response) {
                             if ($response->isExpired()) {
-                                $this->userSubscriptionManager->delete($response->getSubscription());
+                                //$this->userSubscriptionManager->delete($response->getSubscription());
                                 $this->logger->debug('The subscription ' . $response->getSubscription()->getSubscriptionHash() . ' of user ' . $response->getSubscription()->getUser()->getUsername(). ' is expired and has been deleted.');
                             }
                         }
