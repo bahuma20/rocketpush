@@ -68,7 +68,7 @@ class RocketbeansAuthenticator extends SocialAuthenticator
         /** @var User $user */
         $user = new User();
 
-        $user->setUsername($rocketbeansUser->getName());
+        $user->setUsername($rocketbeansUser->getName() ?: 'Rocketbeans User');
         $user->setRocketbeansId($rocketbeansUser->getId());
         $user->setRbtvAccessToken($credentials->getToken());
         $user->setRbtvRefreshToken($credentials->getRefreshToken());
