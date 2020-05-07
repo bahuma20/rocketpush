@@ -18,6 +18,7 @@ class RocketbeansLoginController extends AbstractController {
         return $clientRegistry
             ->getClient('rocketbeans')
             ->redirect([
+                'user.info',
                 'user.subscriptions.read',
             ]);
     }
