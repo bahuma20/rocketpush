@@ -5691,16 +5691,16 @@
         },
         {
             "name": "symfony/security-http",
-            "version": "v5.0.4",
+            "version": "v5.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-http.git",
-                "reference": "e063a0a032f81d38b06cda73c1f5ed25cae8538e"
+                "reference": "1ca59bf6f7343843fe54fc3ca99f50325246e210"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-http/zipball/e063a0a032f81d38b06cda73c1f5ed25cae8538e",
-                "reference": "e063a0a032f81d38b06cda73c1f5ed25cae8538e",
+                "url": "https://api.github.com/repos/symfony/security-http/zipball/1ca59bf6f7343843fe54fc3ca99f50325246e210",
+                "reference": "1ca59bf6f7343843fe54fc3ca99f50325246e210",
                 "shasum": ""
             },
             "require": {
@@ -5752,7 +5752,7 @@
             ],
             "description": "Symfony Security Component - HTTP Integration",
             "homepage": "https://symfony.com",
-            "time": "2020-01-31T09:13:47+00:00"
+            "time": "2020-03-23T12:42:46+00:00"
         },
         {
             "name": "symfony/serializer",
@@ -7705,6 +7705,7 @@
                 "monolog",
                 "productivity"
             ],
+            "abandoned": true,
             "time": "2019-10-24T07:13:31+00:00"
         },
         {
