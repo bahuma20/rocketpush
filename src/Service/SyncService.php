@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\UserSubscription;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class SyncService {
 
@@ -75,6 +76,8 @@ class SyncService {
             }
         } catch (GuzzleException $e) {
             $errors[] = 'User '. $user->getId() .': GuzzleException: ' . $e->getMessage();
+        } catch (IdentityProviderException $e) {
+            $errors[] = 'User '. $user->getId() .': IdentityProviderException: ' . $e->getMessage();
         }
 
         return $errors;
