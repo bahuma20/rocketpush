@@ -1,6 +1,8 @@
 # Rocketpush
 Push Benachrichtigungen für rocketbeans.tv
 
+Dieses Projekt wurde archiviert, da Push-Benachrichtigungen jetzt direkt auf rocketbeans.tv verfügbar sind.
+
 ## Features
 - [x] Login mit rocketbeans.tv Account
 - [x] Es werden automatisch die Abonnements der rocketbeans.tv Website übernommen
